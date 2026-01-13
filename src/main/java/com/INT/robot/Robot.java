@@ -1,9 +1,4 @@
-/************************ PROJECT PHIL ************************/
-/* Copyright (c) 2023 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
-
-package com.stuypulse.robot;
+package com.INT.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;

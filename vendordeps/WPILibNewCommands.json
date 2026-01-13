@@ -3,6 +3,7 @@
     "name": "WPILib-New-Commands",
     "version": "1.0.0",
     "uuid": "111e20f7-815e-48f8-9dd6-e675ce75b266",
+    "frcYear": "2026",
     "mavenUrls": [],
     "jsonUrl": "",
     "javaDependencies": [
@@ -24,16 +25,15 @@
             "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
+                "linuxsystemcore",
                 "linuxathena",
                 "linuxarm32",
                 "linuxarm64",
                 "windowsx86-64",
                 "windowsx86",
                 "linuxx86-64",
-                "osxx86-64",
-                "osxarm64"
+                "osxuniversal"
             ]
         }
     ]
-  }
-  
+}
