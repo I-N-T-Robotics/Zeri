@@ -8,7 +8,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-def ROBOT_MAIN_CLASS = "com.stuypulse.robot.Main"
+def ROBOT_MAIN_CLASS = "com.INT.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -72,6 +72,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.8.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

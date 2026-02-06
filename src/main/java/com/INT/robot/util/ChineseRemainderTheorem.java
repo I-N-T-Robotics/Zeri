@@ -6,12 +6,7 @@ public final class ChineseRemainderTheorem {
     //TODO: look to reset values at the beginning-ish of the auto
     public ChineseRemainderTheorem( double teethA, double teethB )
     {
-        targetRatio = teethA/ teethB ;
-    }
- 
-    public void myTest()
-    {
-
+        targetRatio = teethB/ teethA ;
     }
 
     public double getARotationNonLame( double encoderA, double encoderB )
