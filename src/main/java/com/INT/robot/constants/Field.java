@@ -13,8 +13,11 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public interface Field {
+        
+    public static final Field2d FIELD2D = new Field2d();
 
     double WIDTH = Units.inchesToMeters(317.69); // y
     double LENGTH = Units.inchesToMeters(651.22); // x
@@ -237,6 +240,14 @@ public interface Field {
 
     //x value is the one on the horizontal to change 
     Translation2d BLUE_GOAL_CENTER = new Translation2d(Math.abs(tag26x - tag20x), Math.abs(tag18y - tag21y)); 
-
     Translation2d RED_GOAL_CENTER = transformToOppositeAlliance(BLUE_GOAL_CENTER);
+    Translation2d hubCenter = Robot.isBlue() ?  BLUE_GOAL_CENTER :  RED_GOAL_CENTER;
+
+    Translation2d BLUE_TOP_FERRY = new Translation2d(182.11/2 /* 1/2 ds to alliance line*/, 158.84/2 /*1/2 middle to top*/);
+    Translation2d RED_TOP_FERRY = transformToOppositeAlliance(BLUE_TOP_FERRY);
+    Translation2d topFerry = Robot.isBlue() ? BLUE_TOP_FERRY : RED_TOP_FERRY;
+
+    Translation2d BLUE_BOTTOM_FERRY = new Translation2d(182.11/2, BLUE_TOP_FERRY.getY() + 158.84);
+    Translation2d RED_BOTTOM_FERRY = transformToOppositeAlliance(BLUE_BOTTOM_FERRY);
+    Translation2d bottomFerry = Robot.isBlue() ? BLUE_BOTTOM_FERRY : RED_BOTTOM_FERRY;
 }

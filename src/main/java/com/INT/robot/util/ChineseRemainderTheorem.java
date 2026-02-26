@@ -68,6 +68,7 @@ public final class ChineseRemainderTheorem {
         double absoluteFinal = (((at/360) + k1) / teethC) * teethA;
 
         return absoluteFinal/turretRatio;
+        //return rotations
     }
 
 //     public static double getTurretRotations(
