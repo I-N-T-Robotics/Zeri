@@ -5,7 +5,9 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.INT.robot.commands.auton.DoNothingAuton;
+import com.INT.robot.commands.shooter.ShooterShoot;
 import com.INT.robot.commands.turret.AimTurret;
+import com.INT.robot.subsystems.Shooter.Shooter;
 import com.INT.robot.subsystems.Swerve.CommandSwerveDrivetrain;
 import com.INT.robot.subsystems.Swerve.TunerConstants;
 import com.INT.robot.subsystems.Turret.Turret;
@@ -30,6 +32,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final Turret turret;
+    private final Shooter shooter;
 
     // Gamepads
     
@@ -42,6 +45,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         turret = new Turret();
+        shooter = new Shooter();
         
         configureDefaultCommands();
         configureButtonBindings();
@@ -54,6 +58,7 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         turret.setDefaultCommand(new AimTurret(turret));
+        shooter.setDefaultCommand(new ShooterShoot(shooter));
         
         drivetrain.setDefaultCommand(
         drivetrain.applyRequest(() ->

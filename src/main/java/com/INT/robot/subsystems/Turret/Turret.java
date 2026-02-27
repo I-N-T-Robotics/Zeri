@@ -1,5 +1,7 @@
 package com.INT.robot.subsystems.Turret;
 
+import java.text.BreakIterator;
+
 import com.INT.robot.constants.Field;
 import com.INT.robot.constants.Motors.TurretConstants;
 import com.INT.robot.constants.Settings;
@@ -8,6 +10,7 @@ import com.INT.robot.util.ChineseRemainderTheorem;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -39,6 +42,7 @@ public class Turret extends SubsystemBase {
     public Turret() {
         turretMotor = new TalonFX(TurretConstants.TURRET_MOTOR, "Yuumi");
         turretMotor.getConfigurator().apply(TurretConstants.turretConfigs);
+        turretMotor.setNeutralMode(NeutralModeValue.Brake);
 
         turretMotorEncoderTurret = new CANcoder(TurretConstants.TURRET_ENCODER_TURRET, "Yuumi");
         turretMotorEncoderTurret.getConfigurator().apply(TurretConstants.turretCANcoderConfigs);
@@ -121,25 +125,26 @@ public class Turret extends SubsystemBase {
         turretMotor.getConfigurator().setPosition(getAbsoluteTurretRotations());
     }
 
-    private double getShortestPathRotations(double targetAngleRadians) {
-        double currentRotations = turretMotor.getPosition().getValueAsDouble();
+    // private double getShortestPathRotations(double targetAngleRadians) {
+    //     double currentRotations = turretMotor.getPosition().getValueAsDouble();
 
-        double targetRotations = targetAngleRadians / (2.0 * Math.PI);
+    //     double targetRotations = targetAngleRadians / (2.0 * Math.PI);
 
-        double wrappedTarget = MathUtil.inputModulus(
-                targetRotations,
-                currentRotations - 0.5,
-                currentRotations + 0.5);
+    //     double wrappedTarget = MathUtil.inputModulus(
+    //             targetRotations,
+    //             currentRotations - 0.5,
+    //             currentRotations + 0.5);
 
-        return wrappedTarget;
-    }
+    //     return wrappedTarget;
+    // }
 
     public void setMagicPosition() {
         double robotRelativeAngle = getTargetPosition(getRobotPose());
     
-        robotRelativeAngle = MathUtil.angleModulus(robotRelativeAngle);
+        // robotRelativeAngle = MathUtil.angleModulus(robotRelativeAngle);
     
-        double targetRotations = getShortestPathRotations(robotRelativeAngle);
+        double targetRotations = MathUtil.clamp(robotRelativeAngle, Settings.Turret.Constants.TURRET_MIN_ROTATIONS, Settings.Turret.Constants.TURRET_MAX_ROTATIONS);
+         //getShortestPathRotations(robotRelativeAngle);
     
         turretMotor.setControl(
             targetPosition
