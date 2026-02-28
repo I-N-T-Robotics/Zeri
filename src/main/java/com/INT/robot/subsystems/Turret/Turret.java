@@ -54,13 +54,20 @@ public class Turret extends SubsystemBase {
         double encoderEncoder = turretMotorEncoderEncoder.getPosition().getValueAsDouble();
         double turretEncoder = turretMotorEncoderTurret.getPosition().getValueAsDouble();
 
+        // return ChineseRemainderTheorem.getTurretRotations(
+        //         60,
+        //         43,
+        //         14,
+        //         136,
+        //         turretEncoder,
+        //         encoderEncoder);
         return ChineseRemainderTheorem.getTurretRotations(
-                60,
-                43,
-                14,
-                136,
-                turretEncoder,
-                encoderEncoder);
+            turretEncoder,
+            encoderEncoder,
+        60,
+        43,
+   136
+);
     } //returns rotations
 
     public Rotation2d getAbsoluteTurretRotationsRot2d() {

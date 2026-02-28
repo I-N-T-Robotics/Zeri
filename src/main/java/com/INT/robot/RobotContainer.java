@@ -51,7 +51,7 @@ public class RobotContainer {
     private final Hood hood = new Hood();
     private final Intake intake = new Intake();
     private final Spindexer spindexer = new Spindexer();
-    private final LimelightVision limelightVision = new LimelightVision();
+    private final LimelightVision limelightVision = new LimelightVision(drivetrain);
 
     // Gamepads
     

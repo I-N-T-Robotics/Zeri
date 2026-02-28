@@ -15,15 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightVision extends SubsystemBase {
 
-    // private static final LimelightVision instance;
-
-    // static {
-    //     instance = new LimelightVision();
-    // }
-
-    // public static LimelightVision getInstance() {
-    //     return instance;
-    // }
     private CommandSwerveDrivetrain drivetrain;
 
     public void setDrivetrain(CommandSwerveDrivetrain drivetrain) {
@@ -39,7 +30,9 @@ public class LimelightVision extends SubsystemBase {
     private int imuMode;
     private int maxTagCount;
 
-    public LimelightVision() {
+    public LimelightVision(CommandSwerveDrivetrain drivetrain) {
+        this.drivetrain = drivetrain;
+        
         for (Camera camera : Cameras.LimelightCameras) {
             Pose3d cameraLocation = camera.getLocation();
             LimelightHelpers.setCameraPose_RobotSpace(
