@@ -8,7 +8,6 @@ import com.INT.robot.subsystems.Swerve.CommandSwerveDrivetrain;
 import com.INT.robot.util.vision.LimelightHelpers;
 import com.INT.robot.util.vision.LimelightHelpers.PoseEstimate;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,14 +15,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightVision extends SubsystemBase {
 
-    private static final LimelightVision instance;
+    // private static final LimelightVision instance;
 
-    static {
-        instance = new LimelightVision();
-    }
+    // static {
+    //     instance = new LimelightVision();
+    // }
 
-    public static LimelightVision getInstance() {
-        return instance;
+    // public static LimelightVision getInstance() {
+    //     return instance;
+    // }
+    private CommandSwerveDrivetrain drivetrain;
+
+    public void setDrivetrain(CommandSwerveDrivetrain drivetrain) {
+        this.drivetrain = drivetrain;
     }
 
     public enum MegaTagMode {
@@ -35,7 +39,7 @@ public class LimelightVision extends SubsystemBase {
     private int imuMode;
     private int maxTagCount;
 
-    private LimelightVision() {
+    public LimelightVision() {
         for (Camera camera : Cameras.LimelightCameras) {
             Pose3d cameraLocation = camera.getLocation();
             LimelightHelpers.setCameraPose_RobotSpace(
@@ -57,10 +61,10 @@ public class LimelightVision extends SubsystemBase {
         this.megaTagMode = mode;
         switch (mode) {
             case MT1:
-                CommandSwerveDrivetrain.getInstance().setVisionMeasurementStdDevs(Settings.Vision.MT1_STDDEVS);
+                drivetrain.setVisionMeasurementStdDevs(Settings.Vision.MT1_STDDEVS);
                 break;
             case MT2:
-                CommandSwerveDrivetrain.getInstance().setVisionMeasurementStdDevs(Settings.Vision.MT1_STDDEVS);
+                drivetrain.setVisionMeasurementStdDevs(Settings.Vision.MT1_STDDEVS);
                 break;
         }
     }
@@ -96,13 +100,6 @@ public class LimelightVision extends SubsystemBase {
             : LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
     }
 
-    private boolean robotIsOnAllianceSide() {
-        Pose2d pose = CommandSwerveDrivetrain.getInstance().getPose();
-        return Robot.isBlue()
-            ? pose.getX() < Units.inchesToMeters(182.11)
-            : pose.getX() > Units.inchesToMeters(469.11);
-    }
-
     @Override
     public void periodic() {
         this.maxTagCount = 0;
@@ -114,11 +111,11 @@ public class LimelightVision extends SubsystemBase {
 
             LimelightHelpers.SetRobotOrientation(
                 camera.getName(),
-                (CommandSwerveDrivetrain.getInstance().getPose().getRotation().getDegrees() + (Robot.isBlue() ? 0 : 180)) % 360,
+                drivetrain.getPose().getRotation().getDegrees() + (Robot.isBlue() ? 0 : 180) % 360,
                 imuMode, imuMode, imuMode, imuMode, imuMode);
 
                 if ((poseEstimate != null) && poseEstimate.tagCount > 0) {
-                    CommandSwerveDrivetrain.getInstance().addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
+                    drivetrain.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
                     SmartDashboard.putBoolean("Vision/" + camera.getName() + "/Has Data", true);
                     SmartDashboard.putNumber("Vision/" + camera.getName() + "/Tag Count", poseEstimate.tagCount);
                     maxTagCount = Math.max(maxTagCount, poseEstimate.tagCount);

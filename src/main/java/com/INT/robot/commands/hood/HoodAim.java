@@ -1,25 +1,25 @@
-package com.INT.robot.commands.shooter;
+package com.INT.robot.commands.hood;
 
-import com.INT.robot.subsystems.Shooter.Shooter;
+import com.INT.robot.subsystems.Hood.Hood;
 import com.INT.robot.subsystems.Swerve.CommandSwerveDrivetrain;
 import com.INT.robot.subsystems.Turret.Turret;
 import com.INT.robot.util.Distance;
-import com.INT.robot.util.ShootInterpolation;
+import com.INT.robot.util.HoodInterpolation;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ShooterShoot extends Command {
-    private final Shooter shooter;
-    private final CommandSwerveDrivetrain drivetrain;
+public class HoodAim extends Command {
+    private final Hood hood;
     private final Turret turret;
+    private final CommandSwerveDrivetrain drivetrain;
 
-    public ShooterShoot(Shooter shooter, CommandSwerveDrivetrain drivetrain, Turret turret) {
-        this.shooter = shooter;
-        this.drivetrain = drivetrain;
+    public HoodAim(Hood hood, Turret turret, CommandSwerveDrivetrain drivetrain) {
+        this.hood = hood;
         this.turret = turret;
-        addRequirements(shooter, drivetrain, turret);
+        this.drivetrain = drivetrain;
+        addRequirements(hood, turret, drivetrain);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ShooterShoot extends Command {
 
         double distance = Distance.calculateDistance(robotPose.getX(), robotPose.getY(), targetPose.getX(), targetPose.getY());
 
-        shooter.setRightMotorRPM(ShootInterpolation.getRPM(distance));
+        hood.setHoodAngle(HoodInterpolation.getAngle(distance)); //TODO: make sure distance is in inches (For shooter too)
     }
 
     @Override

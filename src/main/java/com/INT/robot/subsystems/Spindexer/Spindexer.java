@@ -13,20 +13,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Spindexer extends SubsystemBase {
 
-    private static final Spindexer instance; 
+    // private static final Spindexer instance; 
 
-    static {
-        instance = new Spindexer();
-    }
+    // static {
+    //     instance = new Spindexer();
+    // }
 
-    public static Spindexer getInstance() {
-        return instance;
-    }
+    // public static Spindexer getInstance() {
+    //     return instance;
+    // }
 
     private TalonFX intakeSpindexMotor;
     private TalonFX farSpindexMotor;
 
-    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0);
+    private TalonFX transitionMotor;
+
+    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true);
 
     public Spindexer() {
         intakeSpindexMotor = new TalonFX(Motors.SpindexerConstants.INTAKE_SPINDEXER_MOTOR, "yuumi");
@@ -37,7 +39,27 @@ public class Spindexer extends SubsystemBase {
         farSpindexMotor.getConfigurator().apply(Motors.SpindexerConstants.farSpindexerMotorConfig);
         farSpindexMotor.setNeutralMode(NeutralModeValue.Coast);
 
+        transitionMotor = new TalonFX(Motors.SpindexerConstants.TRANSITION_MOTOR, "yuumi");
+        transitionMotor.getConfigurator().apply(Motors.SpindexerConstants.transitionMotorConfig);
+        transitionMotor.setNeutralMode(NeutralModeValue.Coast);
+
         intakeSpindexMotor.setControl(new Follower(Motors.SpindexerConstants.FAR_SPINDEXER_MOTOR,  MotorAlignmentValue.Aligned));
+    }
+
+    public void startTransition() {
+        transitionMotor.setControl(
+            velocityVoltage
+            .withVelocity(Settings.Spindexer.SPINDEXER_RPM * Settings.Spindexer.TRANSITION_TO_SPEED_RATIO));
+    }
+
+    public void stopTransition() {
+        transitionMotor.setControl(
+            velocityVoltage
+            .withVelocity(0));
+    }
+
+    public double getTransitionRPM() {
+        return transitionMotor.getVelocity().getValueAsDouble();
     }
 
     public void startSpindexer() {
@@ -59,5 +81,6 @@ public class Spindexer extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Spindexer/SpindexerRPM", getSpindexerRPM());
+        SmartDashboard.putNumber("Spindexer/TransitionRPM", getTransitionRPM());
     }
 }

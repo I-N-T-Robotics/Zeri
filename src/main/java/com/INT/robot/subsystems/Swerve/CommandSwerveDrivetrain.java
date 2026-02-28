@@ -41,18 +41,23 @@ import com.pathplanner.lib.util.PathPlannerLogging;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
-    private final static CommandSwerveDrivetrain instance;
+    // private final static CommandSwerveDrivetrain instance;
 
     private FieldObject2d turret2d = Field.FIELD2D.getObject("Turret 2D");
     private Pose2d turretPose = new Pose2d();
+    private Turret turret;
 
-    static {
-        instance = TunerConstants.createDrivetrain();
+    public void setTurret(Turret turret) {
+        this.turret = turret;
     }
 
-    public static CommandSwerveDrivetrain getInstance() {
-        return instance;
-    }
+    // static {
+    //     instance = TunerConstants.createDrivetrain();
+    // }
+
+    // public static CommandSwerveDrivetrain getInstance() {
+    //     return instance;
+    // }
     
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
@@ -333,7 +338,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 new PPHolonomicDriveController(Gains.Swerve.Alignment.XY, Gains.Swerve.Alignment.THETA),
                 RobotConfig.fromGUISettings(),
                 () -> false,
-                instance
+                this
             );
             PathPlannerLogging.setLogActivePathCallback((poses) -> {
                 if (Robot.isBlue()) {
@@ -399,7 +404,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Pose2d pose = getPose();
         turretPose = new Pose2d(
             pose.getTranslation().plus(Settings.Turret.Constants.TURRET_OFFSET.getTranslation().rotateBy(pose.getRotation())),
-            pose.getRotation().plus(Turret.getInstance().getAbsoluteTurretRotationsRot2d())
+            pose.getRotation().plus(turret.getAbsoluteTurretRotationsRot2d())
         );
 
         turret2d.setPose(Robot.isBlue() ? turretPose : Field.transformToOppositeAlliance(turretPose));

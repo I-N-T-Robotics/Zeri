@@ -14,15 +14,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
 
-    private static final Shooter instance; 
+    // private static final Shooter instance; 
 
-    static {
-        instance = new Shooter();
-    }
+    // static {
+    //     instance = new Shooter();
+    // }
 
-    public static Shooter getInstance() {
-        return instance;
-    }
+    // public static Shooter getInstance() {
+    //     return instance;
+    // }
 
     private TalonFX rightMotor;
     private TalonFX leftMotor;
@@ -42,7 +42,7 @@ public class Shooter extends SubsystemBase {
 
         leftMotor.setControl(new Follower(Motors.ShooterConstants.RIGHT_MOTOR, MotorAlignmentValue.Aligned)); //set to Opposite for other direction
 
-        isShooting = false;
+        isShooting = true;
     }
 
     public void setRightMotorRPM(double rpm) {

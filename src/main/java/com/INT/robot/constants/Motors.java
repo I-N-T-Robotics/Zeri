@@ -2,8 +2,7 @@ package com.INT.robot.constants;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 public interface Motors {
 
@@ -40,5 +39,23 @@ public interface Motors {
 
         public static TalonFXConfiguration intakeSpindexerMotorConfig = new TalonFXConfiguration();
         public static TalonFXConfiguration farSpindexerMotorConfig = new TalonFXConfiguration();
+
+        public static int TRANSITION_MOTOR = 0;
+        public static TalonFXConfiguration transitionMotorConfig = new TalonFXConfiguration();
+    }
+
+    public static class HoodConstants {
+        public static int HOOD_MOTOR = 0;
+        public static int HOOD_ENCODER = 0;
+
+        public static TalonFXConfiguration hoodMotorConfigs = new TalonFXConfiguration();
+        public static CANcoderConfiguration hoodEncoderConfigs = new CANcoderConfiguration();
+
+        static {
+            hoodMotorConfigs.Feedback.FeedbackRemoteSensorID = Motors.HoodConstants.HOOD_ENCODER;
+            hoodMotorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+            hoodMotorConfigs.Feedback.SensorToMechanismRatio = 1; //sensor to mech
+            hoodMotorConfigs.Feedback.RotorToSensorRatio = 1; //motor to sensor
+        }
     }
 }

@@ -62,5 +62,10 @@ public interface Settings {
 
     public interface Spindexer {
         public final double SPINDEXER_RPM = 5000;
+        public final double TRANSITION_TO_SPEED_RATIO = 1;
+    }
+
+    public interface Hood {
+        public final double HOOD_TOLERANCE = 5;
     }
 }

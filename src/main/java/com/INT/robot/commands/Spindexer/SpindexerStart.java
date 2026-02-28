@@ -1,4 +1,4 @@
-package com.INT.robot.commands.Spindexer;
+package com.INT.robot.commands.spindexer;
 
 import com.INT.robot.subsystems.Spindexer.Spindexer;
 
@@ -15,6 +15,7 @@ public class SpindexerStart extends Command {
     @Override
     public void execute() {
         spindexer.startSpindexer();
+        spindexer.startTransition();
     }
 
     @Override
@@ -25,5 +26,6 @@ public class SpindexerStart extends Command {
     @Override
     public void end(boolean interrupted) {
         spindexer.stopSpindexer();
+        spindexer.stopTransition();
     }
 }

@@ -14,16 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-    private static final Intake instance; 
-
-    static {
-        instance = new Intake();
-    }
-
-    public static Intake getInstance() {
-        return instance;
-    }
-
     private TalonFX intakePivot;
     private TalonFX intakeMotor1;
     private TalonFX intakeMotor2;
