@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import com.INT.robot.commands.Spindexer.SpindexerStart;
+import com.INT.robot.commands.Spindexer.SpindexerStop;
 import com.INT.robot.commands.auton.DoNothingAuton;
 import com.INT.robot.commands.hood.HoodAim;
 import com.INT.robot.commands.hood.HoodReset;
@@ -13,8 +15,6 @@ import com.INT.robot.commands.intake.IntakeStop;
 import com.INT.robot.commands.shooter.ShooterShoot;
 import com.INT.robot.commands.shooter.ShooterStart;
 import com.INT.robot.commands.shooter.ShooterStop;
-import com.INT.robot.commands.spindexer.SpindexerStart;
-import com.INT.robot.commands.spindexer.SpindexerStop;
 import com.INT.robot.commands.swerve.SwerveXMode;
 import com.INT.robot.commands.turret.AimTurret;
 import com.INT.robot.constants.Field;

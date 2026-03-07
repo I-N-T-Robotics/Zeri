@@ -1,12 +1,15 @@
 package com.INT.robot.subsystems.Swerve;
 
-import static edu.wpi.first.units.Units.Second;
-import static edu.wpi.first.units.Units.Volts;
-
 import java.util.function.Supplier;
 
+import static edu.wpi.first.units.Units.*;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -46,6 +49,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private FieldObject2d turret2d = Field.FIELD2D.getObject("Turret 2D");
     private Pose2d turretPose = new Pose2d();
     private Turret turret;
+
+  private static final double DEADBAND = 0.1;
+
+    public static final double DRIVE_BASE_RADIUS =
+    Math.max(
+        Math.max(
+            Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
+            Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
+        Math.max(
+            Math.hypot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
+            Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
 
     public void setTurret(Turret turret) {
         this.turret = turret;
@@ -328,6 +342,21 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
+    public Rotation2d getRotation() {
+        return getState().Pose.getRotation();
+    }
+
+    /** Returns the maximum linear speed in meters per sec. */
+    public double getMaxLinearSpeedMetersPerSec() {
+        return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    }
+
+    /** Returns the maximum angular speed in radians per sec. */
+    public double getMaxAngularSpeedRadPerSec() {
+        return getMaxLinearSpeedMetersPerSec() / DRIVE_BASE_RADIUS;
+    }
+
+
     public void configureAutoBuilder() {
         try{
             AutoBuilder.configure(
@@ -377,13 +406,32 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public ChassisSpeeds getChassisSpeeds() {
         return getKinematics().toChassisSpeeds(getModuleStates());
     }
+    
+    public ChassisSpeeds getFieldRelativeSpeeds() {
+        return ChassisSpeeds.fromFieldRelativeSpeeds(getChassisSpeeds(), getRotation3d().toRotation2d());
+    }
+    
+    public static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
+    // Apply deadband
+    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
+    Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
-    private void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
+    // Square magnitude for more precise control
+    linearMagnitude = linearMagnitude * linearMagnitude;
+
+    // Return new linear velocity
+    return new Pose2d(Translation2d.kZero, linearDirection)
+        .transformBy(new Transform2d(linearMagnitude, 0.0, Rotation2d.kZero))
+        .getTranslation();
+  }
+
+    public void setChassisSpeeds(ChassisSpeeds robotSpeeds) {
         setControl(new SwerveRequest.RobotCentric()
             .withVelocityX(robotSpeeds.vxMetersPerSecond)
             .withVelocityY(robotSpeeds.vyMetersPerSecond)
             .withRotationalRate(robotSpeeds.omegaRadiansPerSecond));
     }
+
     
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.

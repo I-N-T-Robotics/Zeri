@@ -1,4 +1,4 @@
-package com.INT.robot.commands.spindexer;
+package com.INT.robot.commands.Spindexer;
 
 import com.INT.robot.subsystems.Spindexer.Spindexer;
 
