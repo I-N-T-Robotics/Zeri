@@ -1,0 +1,124 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0,
+        "y": 4.935509838998211
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.023220035778175,
+        "y": 4.318944543828264
+      },
+      "isLocked": false,
+      "linkedName": "Alliance balls mid"
+    },
+    {
+      "anchor": {
+        "x": 1.5689087656529512,
+        "y": 0.6520035778175304
+      },
+      "prevControl": {
+        "x": 1.8185047792356732,
+        "y": 0.6662102665103149
+      },
+      "nextControl": {
+        "x": 1.2838461538461532,
+        "y": 0.6357781753130587
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.6602862254025041,
+        "y": 0.6520035778175304
+      },
+      "prevControl": {
+        "x": 0.31176120700116416,
+        "y": 0.6131039299864308
+      },
+      "nextControl": {
+        "x": 0.908743463797578,
+        "y": 0.6797344394899238
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5689087656529512,
+        "y": 0.6520035778175304
+      },
+      "prevControl": {
+        "x": 1.3194956123964017,
+        "y": 0.6348840280972577
+      },
+      "nextControl": {
+        "x": 1.818321918909502,
+        "y": 0.669123127537803
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5689087656529512,
+        "y": 0.6520035778175304
+      },
+      "prevControl": {
+        "x": 1.316296958855098,
+        "y": 0.6520035778175304
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9866310160427816,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.9037433155080197,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "wait",
+      "waypointRelativePos": 1.8033898305084752,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 3.986440677966079,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 47.72631099390627
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -19.44771028889455
+  },
+  "useDefaultConstraints": true
+}
