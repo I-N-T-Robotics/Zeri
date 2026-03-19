@@ -23,15 +23,12 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         intakePivot = new TalonFX(IntakeConstants.PIVOT, "yuumi");
-        intakePivot.getConfigurator().apply(IntakeConstants.intakePivotConfig);
         intakePivot.setNeutralMode(NeutralModeValue.Coast);
 
         intakeMotor1 = new TalonFX(IntakeConstants.MOTOR1, "yuumi");
-        intakeMotor1.getConfigurator().apply(IntakeConstants.intakeMotor1Config);
         intakeMotor1.setNeutralMode(NeutralModeValue.Brake);
 
         intakeMotor2 = new TalonFX(IntakeConstants.MOTOR2, "yuumi");
-        intakeMotor2.getConfigurator().apply(IntakeConstants.intakeMotor2Config);
         intakeMotor2.setNeutralMode(NeutralModeValue.Brake);
 
         intakeMotor2.setControl(new Follower(IntakeConstants.MOTOR1, MotorAlignmentValue.Opposed));

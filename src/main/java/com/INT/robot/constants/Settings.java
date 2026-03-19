@@ -38,7 +38,19 @@ public interface Settings {
             public final double toleranceRadians = Units.degreesToRadians(5);
             public final double TURRET_MIN_ROTATIONS = -135/360;
             public final double TURRET_MAX_ROTATIONS = 135/360;
+            public final double GEAR_RATIO_MOTOR_TO_MECH = 0.0;
             //TODO: add constants
+        }
+
+        public interface SoftwareLimit {
+            public final double FORWARD_MAX_ROTATIONS = 0.35;
+            public final double BACKWARDS_MAX_ROTATIONS = 0.35;
+        }
+
+        public interface Encoder {
+            //in rotations
+            public final double ENCODER_ENCODER_OFFSET = 0.0;
+            public final double ENCODER_TURRET_OFFSET = 0.0;
         }
     }
 
@@ -49,6 +61,7 @@ public interface Settings {
 
     public interface Shooter {
         public final double SHOOTER_RPM_TOLERANCE = 50;
+        public final double GEAR_RATIO = 1;
     }
 
     public interface Intake {
@@ -56,6 +69,7 @@ public interface Settings {
         public final double UP_POSITION = 0;
         public final double INTAKE_RPM = 5000;
         public final double OUTTAKE_RPM = -5000;
+        public final double GEAR_RATIO = 1; //TODO: FIX
 
         public final double INTAKE_POSITION_TOLERANCE = 5;
     }
@@ -63,11 +77,22 @@ public interface Settings {
     public interface Spindexer {
         public final double SPINDEXER_RPM = 5000;
         public final double TRANSITION_TO_SPEED_RATIO = 1;
+        public final double TRANSITION_MIN_SPEED = 4800;
+        public final double GEAR_RATIO = 1;
     }
 
     public interface Hood {
         public final double HOOD_TOLERANCE = 5;
         public final double HOOD_RESET_RPS = -0.2;
         public final double HOOD_STALL_CURRENT = 20;
+        public final double GEAR_RATIO = 1;
+        //in rotations
+        public final double FORWARD_SOFT_LIMIT = 0.5;
+        public final double REVERSE_SOFT_LIMIT = 0.0;
+        public final double ENCODER_OFFSET = 0;
+    }
+
+    public interface Transition {
+        public final double GEAR_RATIO = 1;
     }
 }

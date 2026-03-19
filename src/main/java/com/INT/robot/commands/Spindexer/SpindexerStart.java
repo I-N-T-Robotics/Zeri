@@ -14,8 +14,10 @@ public class SpindexerStart extends Command {
 
     @Override
     public void execute() {
-        spindexer.startSpindexer();
         spindexer.startTransition();
+        if (spindexer.transitionAtSpeed()) {
+            spindexer.startSpindexer();
+        }
     }
 
     @Override

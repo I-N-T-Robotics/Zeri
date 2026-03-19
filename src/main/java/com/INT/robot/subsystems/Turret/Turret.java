@@ -35,26 +35,24 @@ public class Turret extends SubsystemBase {
 
     private CommandSwerveDrivetrain drivetrain;
 
-    private static final Turret instance;
+    // private static final Turret instance;
 
-    static {
-        instance = new Turret();
-    }
+    // static {
+    //     instance = new Turret();
+    // }
 
-    public static Turret getInstance() {
-        return instance;
-    }
+    // public static Turret getInstance() {
+    //     return instance;
+    // }
 
     public Turret() {
         turretMotor = new TalonFX(TurretConstants.TURRET_MOTOR, "Yuumi");
-        turretMotor.getConfigurator().apply(TurretConstants.turretConfigs);
+        turretMotor.getConfigurator();
         turretMotor.setNeutralMode(NeutralModeValue.Brake);
 
         turretMotorEncoderTurret = new CANcoder(TurretConstants.TURRET_ENCODER_TURRET, "Yuumi");
-        turretMotorEncoderTurret.getConfigurator().apply(TurretConstants.turretCANcoderConfigs);
 
         turretMotorEncoderEncoder = new CANcoder(TurretConstants.TURRET_ENCODER_ENCODER, "Yuumi");
-        turretMotorEncoderEncoder.getConfigurator().apply(TurretConstants.turretCANcoderConfigs);
 
         targetPosition = new MotionMagicVoltage(0);
         setCurrentPosition();
@@ -195,7 +193,7 @@ public class Turret extends SubsystemBase {
                 () -> this.turretMotor.getPosition().getValueAsDouble(),
                 () -> this.turretMotor.getVelocity().getValueAsDouble(),
                 () -> this.turretMotor.getMotorVoltage().getValueAsDouble(),
-                getInstance());
+                this);
     }
 
     private void setVoltageOverride(Optional<Double> volts) {

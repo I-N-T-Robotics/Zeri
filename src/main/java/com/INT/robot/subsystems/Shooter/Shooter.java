@@ -33,11 +33,9 @@ public class Shooter extends SubsystemBase {
 
     public Shooter() {
         rightMotor = new TalonFX(ShooterConstants.RIGHT_MOTOR, "yuumi");
-        rightMotor.getConfigurator().apply(ShooterConstants.shooterRightMotorConfig);
         rightMotor.setNeutralMode(NeutralModeValue.Coast);
 
         leftMotor = new TalonFX(ShooterConstants.LEFT_MOTOR, "yuumi");
-        leftMotor.getConfigurator().apply(ShooterConstants.shooterLeftMotorConfig);
         leftMotor.setNeutralMode(NeutralModeValue.Coast);
 
         leftMotor.setControl(new Follower(Motors.ShooterConstants.RIGHT_MOTOR, MotorAlignmentValue.Aligned)); //set to Opposite for other direction

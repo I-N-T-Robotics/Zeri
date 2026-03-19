@@ -29,6 +29,7 @@ public final class ChineseRemainderTheorem {
     //     return 0. ;
     // }
 
+    //minhwa variation
     // static double[] array1;
     // static double[] array2;
 

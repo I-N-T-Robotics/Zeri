@@ -121,5 +121,3 @@ public class LimelightVision extends SubsystemBase {
         SmartDashboard.putNumber("Vision/IMU Mode", imuMode);
     }
 }
-
-//TODO: fix after generate swerve code

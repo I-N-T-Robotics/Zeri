@@ -24,12 +24,9 @@ public class Hood extends SubsystemBase {
 
     public Hood() {
         hoodMotor = new TalonFX(Motors.HoodConstants.HOOD_MOTOR, "yuumi");
-        Motors.HoodConstants.hoodMotorConfigs.Feedback.FeedbackRemoteSensorID = Motors.HoodConstants.HOOD_ENCODER;
-        hoodMotor.getConfigurator().apply(Motors.HoodConstants.hoodMotorConfigs);
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);
 
         hoodEncoder = new CANcoder(Motors.HoodConstants.HOOD_ENCODER, "yuumi");
-        hoodEncoder.getConfigurator().apply(Motors.HoodConstants.hoodEncoderConfigs);
     }
 
     public void setHoodAngle(double Angle) {
