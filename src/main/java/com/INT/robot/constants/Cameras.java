@@ -28,5 +28,3 @@ public interface Cameras {
         }
     }
 }
-
-//TODO: give camera location constant (do math for turret one)

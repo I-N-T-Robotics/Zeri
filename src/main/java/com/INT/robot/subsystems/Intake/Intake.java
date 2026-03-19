@@ -2,11 +2,9 @@ package com.INT.robot.subsystems.Intake;
 
 import com.INT.robot.constants.Motors.IntakeConstants;
 import com.INT.robot.constants.Settings;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,7 +14,6 @@ public class Intake extends SubsystemBase {
 
     private TalonFX intakePivot;
     private TalonFX intakeMotor1;
-    private TalonFX intakeMotor2;
 
     private final PositionVoltage positionVoltage = new PositionVoltage(0).withEnableFOC(true);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true);
@@ -25,13 +22,8 @@ public class Intake extends SubsystemBase {
         intakePivot = new TalonFX(IntakeConstants.PIVOT, "yuumi");
         intakePivot.setNeutralMode(NeutralModeValue.Coast);
 
-        intakeMotor1 = new TalonFX(IntakeConstants.MOTOR1, "yuumi");
+        intakeMotor1 = new TalonFX(IntakeConstants.DRIVE, "yuumi");
         intakeMotor1.setNeutralMode(NeutralModeValue.Brake);
-
-        intakeMotor2 = new TalonFX(IntakeConstants.MOTOR2, "yuumi");
-        intakeMotor2.setNeutralMode(NeutralModeValue.Brake);
-
-        intakeMotor2.setControl(new Follower(IntakeConstants.MOTOR1, MotorAlignmentValue.Opposed));
     }
 
     public void deploy() {

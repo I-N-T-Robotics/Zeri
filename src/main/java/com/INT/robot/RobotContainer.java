@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.INT.robot.commands.auton.DoNothingAuton;
 import com.INT.robot.commands.hood.HoodAim;
 import com.INT.robot.commands.hood.HoodReset;
+import com.INT.robot.commands.intake.DeployIntake;
 import com.INT.robot.commands.intake.IntakeIntake;
 import com.INT.robot.commands.intake.IntakeOuttake;
 import com.INT.robot.commands.intake.IntakeStop;
@@ -17,6 +18,7 @@ import com.INT.robot.commands.spindexer.SpindexerStart;
 import com.INT.robot.commands.spindexer.SpindexerStop;
 import com.INT.robot.commands.swerve.SwerveXMode;
 import com.INT.robot.commands.turret.AimTurret;
+import com.INT.robot.commands.turret.ResetTurret;
 import com.INT.robot.constants.Field;
 import com.INT.robot.subsystems.Hood.Hood;
 import com.INT.robot.subsystems.Intake.Intake;
@@ -27,11 +29,13 @@ import com.INT.robot.subsystems.Swerve.TunerConstants;
 import com.INT.robot.subsystems.Turret.Turret;
 import com.INT.robot.subsystems.Vision.LimelightVision;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -71,6 +75,19 @@ public class RobotContainer {
         drivetrain.setTurret(turret);
         turret.setDrivetrain(drivetrain);
         limelightVision.setDrivetrain(drivetrain);
+
+        NamedCommands.registerCommand("StartIntake", new IntakeIntake(intake));
+        NamedCommands.registerCommand("DeployIntake", new DeployIntake(intake));
+        NamedCommands.registerCommand("StopIntake", new IntakeStop(intake));
+        NamedCommands.registerCommand("StartSpindexer", new SpindexerStart(spindexer));
+        NamedCommands.registerCommand("StopSpindexer", new SpindexerStop(spindexer));
+        NamedCommands.registerCommand("StartShooter", new ShooterStart(shooter));
+        NamedCommands.registerCommand("StopShooter", new ShooterStop(shooter));
+        NamedCommands.registerCommand("AimTurret", new AimTurret(turret));
+        NamedCommands.registerCommand("XMode", new SwerveXMode(drivetrain));
+        NamedCommands.registerCommand("resetHood", new HoodReset(hood));
+        NamedCommands.registerCommand("resetTurret", new ResetTurret(turret));
+        NamedCommands.registerCommand("wait", new WaitCommand(20));
 
         SmartDashboard.putData("Field", Field.FIELD2D);
     }

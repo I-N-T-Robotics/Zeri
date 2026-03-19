@@ -418,9 +418,10 @@ public interface Motors {
     }
 
         public static class TurretConstants {
-        public static int TURRET_MOTOR = 0;
-        public static int TURRET_ENCODER_TURRET = 0;
-        public static int TURRET_ENCODER_ENCODER = 0;
+        public static int TURRET_MOTOR = 21;
+        public static int TURRET_ENCODER_TURRET = 26;
+        public static int TURRET_ENCODER_ENCODER = 25;
+        //TODO: make sure they are correct
 
         public static TalonFXConfig turretConfigs = new TalonFXConfig()
             .withInvertedValue(InvertedValue.Clockwise_Positive)
@@ -453,8 +454,8 @@ public interface Motors {
     }
 
     public static class ShooterConstants {
-        public static int RIGHT_MOTOR = 0;
-        public static int LEFT_MOTOR = 0;
+        public static int RIGHT_MOTOR = 23;
+        public static int LEFT_MOTOR = 22;
 
         public static TalonFXConfig shooterRightMotorConfig = new TalonFXConfig()
             .withInvertedValue(InvertedValue.CounterClockwise_Positive)
@@ -484,9 +485,8 @@ public interface Motors {
     }
 
     public static class IntakeConstants {
-        public static int PIVOT = 0;
-        public static int MOTOR1 = 0;
-        public static int MOTOR2 = 0;
+        public static int PIVOT = 17;
+        public static int DRIVE = 16;
 
         public static TalonFXConfig intakePivotConfig = new TalonFXConfig()
                 .withInvertedValue(InvertedValue.Clockwise_Positive)
@@ -504,23 +504,7 @@ public interface Motors {
 
                 .withSensorToMechanismRatio(Settings.Intake.GEAR_RATIO);
 
-        public static TalonFXConfig intakeMotor1Config = new TalonFXConfig()
-                .withInvertedValue(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Brake)
-
-                .withSupplyCurrentLimitAmps(60)
-                .withStatorCurrentLimitEnabled(false)
-                .withRampRate(0.25)
-
-                .withPIDConstants(Gains.Intake.Pivot.kP, Gains.Intake.Pivot.kI, Gains.Intake.Pivot.kD, 0)
-                .withFFConstants(Gains.Intake.Pivot.kS, Gains.Intake.Pivot.kV, Gains.Intake.Pivot.kA,
-                        Gains.Intake.Pivot.kG, 0)
-                .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign, 0)
-                .withGravityType(GravityTypeValue.Arm_Cosine)
-
-                .withSensorToMechanismRatio(Settings.Intake.GEAR_RATIO);
-
-        public static TalonFXConfig intakeMotor2Config = new TalonFXConfig()
+        public static TalonFXConfig intakeDriveConfig = new TalonFXConfig()
                 .withInvertedValue(InvertedValue.Clockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake)
 
@@ -538,9 +522,9 @@ public interface Motors {
     }
 
     public static class SpindexerConstants {
-        public static int INTAKE_SPINDEXER_MOTOR = 0;
-        public static int FAR_SPINDEXER_MOTOR = 0;
-        public static int TRANSITION_MOTOR = 0;
+        public static int INTAKE_SPINDEXER_MOTOR = 18;
+        public static int FAR_SPINDEXER_MOTOR = 19;
+        public static int TRANSITION_MOTOR = 20;
 
         public static TalonFXConfig intakeSpindexerMotorConfig = new TalonFXConfig()
             .withInvertedValue(InvertedValue.Clockwise_Positive)
@@ -583,8 +567,8 @@ public interface Motors {
     }
 
     public static class HoodConstants {
-        public static int HOOD_MOTOR = 0;
-        public static int HOOD_ENCODER = 0;
+        public static int HOOD_MOTOR = 24;
+        public static int HOOD_ENCODER = 27;
 
         public static TalonFXConfig hoodMotorConfigs = new TalonFXConfig()
                 .withInvertedValue(InvertedValue.CounterClockwise_Positive)
