@@ -67,5 +67,7 @@ public interface Settings {
 
     public interface Hood {
         public final double HOOD_TOLERANCE = 5;
+        public final double HOOD_RESET_RPS = -0.2;
+        public final double HOOD_STALL_CURRENT = 20;
     }
 }

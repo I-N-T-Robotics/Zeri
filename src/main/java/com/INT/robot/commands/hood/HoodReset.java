@@ -19,7 +19,7 @@ public class HoodReset extends Command {
 
     @Override
     public boolean isFinished() {
-        return hood.hoodAtPosition();
+        return hood.hoodIsStalling();
     }
 
     @Override

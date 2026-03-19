@@ -33,6 +33,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -43,8 +45,11 @@ public class RobotContainer {
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
             
+    //Gamepads
     private final CommandXboxController driver = new CommandXboxController(0);
+    private final CommandXboxController testControls = new CommandXboxController(1);
 
+    //subsystems
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final Turret turret = new Turret();
     private final Shooter shooter = new Shooter();
@@ -52,10 +57,6 @@ public class RobotContainer {
     private final Intake intake = new Intake();
     private final Spindexer spindexer = new Spindexer();
     private final LimelightVision limelightVision = new LimelightVision(drivetrain);
-
-    // Gamepads
-    
-    // Subsystem
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
@@ -85,11 +86,19 @@ public class RobotContainer {
         
         drivetrain.setDefaultCommand(
         drivetrain.applyRequest(() ->
+            drive.withVelocityX((-testControls.getLeftY() * MaxSpeed)) // Drive forward with negative Y (forward)
+                .withVelocityY((-testControls.getLeftX() * MaxSpeed)) // Drive left with negative X (left)
+                .withRotationalRate((-testControls.getRightX() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
+        )
+        ); 
+
+        drivetrain.setDefaultCommand(
+        drivetrain.applyRequest(() ->
             drive.withVelocityX((-driver.getLeftY() * MaxSpeed)) // Drive forward with negative Y (forward)
                 .withVelocityY((-driver.getLeftX() * MaxSpeed)) // Drive left with negative X (left)
                 .withRotationalRate((-driver.getRightX() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
         )
-    ); 
+        ); 
     }
 
     /***************/
@@ -109,13 +118,15 @@ public class RobotContainer {
         driver.leftTrigger()
             .onTrue(new IntakeOuttake(intake));
 
-        //spindexer to shoot
+        //start spindexer, start shooter
         driver.y()
-            .onTrue(new SpindexerStart(spindexer));
+            .onTrue(new SpindexerStart(spindexer))
+            .onTrue(new ShooterStart(shooter));
 
-        //stop spindexer
+        //stop spindexer, stop shooter
         driver.a()
-            .onTrue(new SpindexerStop(spindexer));
+            .onTrue(new SpindexerStop(spindexer))
+            .onTrue(new ShooterStop(shooter));
 
         //X-mode
         driver.b()
@@ -125,13 +136,18 @@ public class RobotContainer {
         driver.start()
             .onTrue(new HoodReset(hood));
 
-        //stop shooter
-        driver.x()
-            .onTrue(new ShooterStop(shooter));
 
-        //start shooter
-        driver.povRight()
-            .onTrue(new ShooterStart(shooter));
+        testControls.y()
+            .whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+
+        testControls.a()
+            .whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+
+        testControls.x()
+            .whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+
+        testControls.b()
+            .whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
     }
 
     /**************/
@@ -142,6 +158,14 @@ public class RobotContainer {
         autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
 
         SmartDashboard.putData("Autonomous", autonChooser);
+    }
+
+    public void configureSysids() {
+        SysIdRoutine turretSysid = turret.getSysIdRoutine();
+        autonChooser.addOption("SysID Turret Dynamic Forward", turretSysid.dynamic(Direction.kForward));
+        autonChooser.addOption("SysID Turret Dynamic Backwards", turretSysid.dynamic(Direction.kReverse));
+        autonChooser.addOption("SysID Turret Quasi Forwards", turretSysid.quasistatic(Direction.kForward));
+        autonChooser.addOption("SysID Turret Quasi Backwards", turretSysid.quasistatic(Direction.kReverse));
     }
 
     public Command getAutonomousCommand() {

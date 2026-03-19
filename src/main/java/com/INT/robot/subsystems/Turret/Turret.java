@@ -1,11 +1,14 @@
 package com.INT.robot.subsystems.Turret;
 
+import java.util.Optional;
+
 import com.INT.robot.Robot;
 import com.INT.robot.constants.Field;
 import com.INT.robot.constants.Motors.TurretConstants;
 import com.INT.robot.constants.Settings;
 import com.INT.robot.subsystems.Swerve.CommandSwerveDrivetrain;
 import com.INT.robot.util.ChineseRemainderTheorem;
+import com.INT.robot.util.SysId;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -18,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class Turret extends SubsystemBase {
 
@@ -30,6 +34,16 @@ public class Turret extends SubsystemBase {
     private boolean aimingAtGoal = true;
 
     private CommandSwerveDrivetrain drivetrain;
+
+    private static final Turret instance;
+
+    static {
+        instance = new Turret();
+    }
+
+    public static Turret getInstance() {
+        return instance;
+    }
 
     public Turret() {
         turretMotor = new TalonFX(TurretConstants.TURRET_MOTOR, "Yuumi");
@@ -44,6 +58,8 @@ public class Turret extends SubsystemBase {
 
         targetPosition = new MotionMagicVoltage(0);
         setCurrentPosition();
+
+        Optional.empty();
     }
 
     public void setDrivetrain(CommandSwerveDrivetrain drivetrain) {
@@ -55,24 +71,23 @@ public class Turret extends SubsystemBase {
         double turretEncoder = turretMotorEncoderTurret.getPosition().getValueAsDouble();
 
         // return ChineseRemainderTheorem.getTurretRotations(
-        //         60,
-        //         43,
-        //         14,
-        //         136,
-        //         turretEncoder,
-        //         encoderEncoder);
+        // 60,
+        // 43,
+        // 14,
+        // 136,
+        // turretEncoder,
+        // encoderEncoder);
         return ChineseRemainderTheorem.getTurretRotations(
-            turretEncoder,
-            encoderEncoder,
-        60,
-        43,
-   136
-);
-    } //returns rotations
+                turretEncoder,
+                encoderEncoder,
+                60,
+                43,
+                136);
+    } // returns rotations
 
     public Rotation2d getAbsoluteTurretRotationsRot2d() {
         return Rotation2d.fromRotations(getAbsoluteTurretRotations());
-    } //returns rotation2d
+    } // returns rotation2d
 
     public void reset() {
         turretMotorEncoderTurret.getConfigurator().setPosition(0);
@@ -91,12 +106,12 @@ public class Turret extends SubsystemBase {
     public boolean robotIsOnAllianceSide() {
         Pose2d pose = drivetrain.getPose();
         return Robot.isBlue()
-            ? pose.getX() < Units.inchesToMeters(182.11)
-            : pose.getX() > Units.inchesToMeters(469.11);
+                ? pose.getX() < Units.inchesToMeters(182.11)
+                : pose.getX() > Units.inchesToMeters(469.11);
     }
 
     public Translation2d getGoalPosition() {
-        if (aimingAtGoal && robotIsOnAllianceSide()) {
+        if (aimingAtGoal && robotIsOnAllianceSide() && Robot.isHubActive()) {
             return Field.hubCenter;
         } else {
             return isInTopSide() ? Field.topFerry : Field.bottomFerry;
@@ -109,13 +124,13 @@ public class Turret extends SubsystemBase {
 
     public double getTargetPosition(Pose2d robotPose) {
         Translation2d goalPosition = getGoalPosition();
-    
+
         double dx = goalPosition.getX() - robotPose.getX();
         double dy = goalPosition.getY() - robotPose.getY();
-    
+
         // Field-relative angle
         double fieldAngle = Math.atan2(dy, dx);
-    
+
         // Convert to robot-relative
         return MathUtil.angleModulus(fieldAngle - robotPose.getRotation().getRadians());
     }
@@ -126,42 +141,35 @@ public class Turret extends SubsystemBase {
 
     public void setMagicPosition() {
 
-        //rotations
-        double currentRotations =
-            turretMotor.getPosition().getValueAsDouble();
+        // rotations
+        double currentRotations = turretMotor.getPosition().getValueAsDouble();
 
         // rotations
-        double targetRotations =
-            getTargetPosition(getRobotPose()) / (2.0 * Math.PI);
+        double targetRotations = getTargetPosition(getRobotPose()) / (2.0 * Math.PI);
 
         // Wrap
         double wrappedTarget = MathUtil.inputModulus(
-            targetRotations,
-            currentRotations - 0.5,
-            currentRotations + 0.5
-        );
+                targetRotations,
+                currentRotations - 0.5,
+                currentRotations + 0.5);
 
         // Clamp
         wrappedTarget = MathUtil.clamp(
-            wrappedTarget,
-            Settings.Turret.Constants.TURRET_MIN_ROTATIONS,
-            Settings.Turret.Constants.TURRET_MAX_ROTATIONS
-        );
+                wrappedTarget,
+                Settings.Turret.Constants.TURRET_MIN_ROTATIONS,
+                Settings.Turret.Constants.TURRET_MAX_ROTATIONS);
 
         turretMotor.setControl(
-            targetPosition
-                .withPosition(wrappedTarget)
-                .withEnableFOC(true)
-        );
+                targetPosition
+                        .withPosition(wrappedTarget)
+                        .withEnableFOC(true));
     }
 
     public boolean atTarget(double toleranceRadians) {
-        double error =
-            MathUtil.angleModulus(
+        double error = MathUtil.angleModulus(
                 (turretMotor.getPosition().getValueAsDouble() * 2.0 * Math.PI)
-                - getTargetPosition(getRobotPose())
-            );
-    
+                        - getTargetPosition(getRobotPose()));
+
         return Math.abs(error) < toleranceRadians;
     }
 
@@ -176,5 +184,20 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("Turret/rotationPosition", getAbsoluteTurretRotations());
         SmartDashboard.putNumber("Turret/rotation2dPosition", getAbsoluteTurretRotationsRot2d().getDegrees());
         SmartDashboard.putBoolean("Turret/aimingAtGoal", aimingAtGoal);
+    }
+
+    public SysIdRoutine getSysIdRoutine() {
+        return SysId.getRoutine(
+                2,
+                6,
+                "Turret",
+                voltage -> setVoltageOverride(Optional.of(voltage)),
+                () -> this.turretMotor.getPosition().getValueAsDouble(),
+                () -> this.turretMotor.getVelocity().getValueAsDouble(),
+                () -> this.turretMotor.getMotorVoltage().getValueAsDouble(),
+                getInstance());
+    }
+
+    private void setVoltageOverride(Optional<Double> volts) {
     }
 }
