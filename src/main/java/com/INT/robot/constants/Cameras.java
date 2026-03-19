@@ -6,8 +6,9 @@ import edu.wpi.first.math.geometry.Rotation3d;
 public interface Cameras {
     
     public Camera[] LimelightCameras = new Camera[] {
-        new Camera("turret", new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0))),
-        new Camera("intake", new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)))
+        //inches, degrees (pitch assuming 0 is perpendicular) (yaw turning clockwise)
+        new Camera("turret", new Pose3d(6.771, 8.047, 13.13, new Rotation3d(0, -34, 225))),
+        new Camera("intake", new Pose3d(1.0, 12.828, 4.692, new Rotation3d(0, -34, 270)))
     };
 
     public static class Camera {

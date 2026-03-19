@@ -34,12 +34,11 @@ public interface Settings {
 
     public interface Turret {
         public interface Constants {
-            public final Transform2d TURRET_OFFSET = new Transform2d(0, 0, new Rotation2d(0));
+            public final Transform2d TURRET_OFFSET = new Transform2d(5.65, 4.45, new Rotation2d(Math.toRadians(90))); //inches
             public final double toleranceRadians = Units.degreesToRadians(5);
             public final double TURRET_MIN_ROTATIONS = -135/360;
             public final double TURRET_MAX_ROTATIONS = 135/360;
-            public final double GEAR_RATIO_MOTOR_TO_MECH = 0.0;
-            //TODO: add constants
+            public final double GEAR_RATIO_MOTOR_TO_MECH = 136;
         }
 
         public interface SoftwareLimit {
@@ -56,7 +55,7 @@ public interface Settings {
 
     public interface Vision {
         public final Vector<N3> MT1_STDDEVS = VecBuilder.fill(0.5, 0.5, 1.0);
-        public final Vector<N3> MT2_STDDEVS = VecBuilder.fill(0.7, 0.7, 694694.0);
+        public final Vector<N3> MT2_STDDEVS = VecBuilder.fill(0.7, 0.7, 96429642.0);
     }
 
     public interface Shooter {
@@ -69,7 +68,7 @@ public interface Settings {
         public final double UP_POSITION = 0;
         public final double INTAKE_RPM = 5000;
         public final double OUTTAKE_RPM = -5000;
-        public final double GEAR_RATIO = 1; //TODO: FIX
+        public final double GEAR_RATIO = 1;
 
         public final double INTAKE_POSITION_TOLERANCE = 5;
     }
@@ -78,14 +77,15 @@ public interface Settings {
         public final double SPINDEXER_RPM = 5000;
         public final double TRANSITION_TO_SPEED_RATIO = 1;
         public final double TRANSITION_MIN_SPEED = 4800;
-        public final double GEAR_RATIO = 1;
-    }
+        public final double GEAR_RATIO = 5; //motor to mech
+    }//16 - 60 - 18 - 24T
 
     public interface Hood {
         public final double HOOD_TOLERANCE = 5;
         public final double HOOD_RESET_RPS = -0.2;
         public final double HOOD_STALL_CURRENT = 20;
-        public final double GEAR_RATIO = 1;
+        public final double GEAR_RATIO = 0.67;
+        //15 - 30 - 16 - 66 - 10T
         //in rotations
         public final double FORWARD_SOFT_LIMIT = 0.5;
         public final double REVERSE_SOFT_LIMIT = 0.0;
@@ -93,6 +93,7 @@ public interface Settings {
     }
 
     public interface Transition {
-        public final double GEAR_RATIO = 1;
+        public final double GEAR_RATIO = 2;
+        //15 - 30 - 30
     }
 }
