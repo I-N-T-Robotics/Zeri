@@ -23,10 +23,11 @@ public class Hood extends SubsystemBase {
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true);
 
     public Hood() {
-        hoodMotor = new TalonFX(Motors.HoodConstants.HOOD_MOTOR, "yuumi");
+        hoodMotor = new TalonFX(Motors.HoodConstants.HOOD_MOTOR, Settings.upper);
         hoodMotor.setNeutralMode(NeutralModeValue.Brake);
 
-        hoodEncoder = new CANcoder(Motors.HoodConstants.HOOD_ENCODER, "yuumi");
+
+        hoodEncoder = new CANcoder(Motors.HoodConstants.HOOD_ENCODER, Settings.upper);
     }
 
     public void setHoodAngle(double Angle) {
