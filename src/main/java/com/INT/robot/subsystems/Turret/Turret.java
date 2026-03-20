@@ -32,6 +32,7 @@ public class Turret extends SubsystemBase {
     private MotionMagicVoltage targetPosition;
 
     private boolean aimingAtGoal = true;
+    private boolean isSeeded = false;
 
     private CommandSwerveDrivetrain drivetrain;
 
@@ -148,8 +149,8 @@ public class Turret extends SubsystemBase {
         // Wrap
         double wrappedTarget = MathUtil.inputModulus(
                 targetRotations,
-                currentRotations - 0.5,
-                currentRotations + 0.5);
+                currentRotations - Settings.Turret.Constants.TURRET_MIN_ROTATIONS,
+                currentRotations + Settings.Turret.Constants.TURRET_MAX_ROTATIONS);
 
         // Clamp
         wrappedTarget = MathUtil.clamp(
@@ -175,14 +176,23 @@ public class Turret extends SubsystemBase {
         return atTarget(Settings.Turret.Constants.toleranceRadians);
     }
 
+    public double getPos() {
+        return turretMotor.getPosition().getValueAsDouble();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Turret/atTarget", atTarget(Settings.Turret.Constants.toleranceRadians));
         SmartDashboard.putNumber("Turret/targetPosition", getTargetPosition(getRobotPose()));
         SmartDashboard.putNumber("Turret/rotationPosition", getAbsoluteTurretRotations());
-        SmartDashboard.putNumber("Turret/rotation2dPosition", getAbsoluteTurretRotationsRot2d().getDegrees());
+        SmartDashboard.putNumber("Turret/localPos", getPos());
         SmartDashboard.putBoolean("Turret/aimingAtGoal", aimingAtGoal);
-    }
+
+        if (!isSeeded && Math.abs(turretMotor.getRotorVelocity().getValueAsDouble()) < 1) {
+            setCurrentPosition();
+            isSeeded = true;
+        }
+    }   
 
     public SysIdRoutine getSysIdRoutine() {
         return SysId.getRoutine(

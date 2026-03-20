@@ -2,6 +2,7 @@ package com.INT.robot.subsystems.Intake;
 
 import com.INT.robot.constants.Motors.IntakeConstants;
 import com.INT.robot.constants.Settings;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -17,13 +18,14 @@ public class Intake extends SubsystemBase {
 
     private final PositionVoltage positionVoltage = new PositionVoltage(0).withEnableFOC(true);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true);
+    private final DutyCycleOut power = new DutyCycleOut(0).withEnableFOC(true);
 
     public Intake() {
-        intakePivot = new TalonFX(IntakeConstants.PIVOT, "yuumi");
-        intakePivot.setNeutralMode(NeutralModeValue.Coast);
+        intakePivot = new TalonFX(IntakeConstants.PIVOT, Settings.upper);
+        intakePivot.setNeutralMode(NeutralModeValue.Brake);
 
-        intakeMotor1 = new TalonFX(IntakeConstants.DRIVE, "yuumi");
-        intakeMotor1.setNeutralMode(NeutralModeValue.Brake);
+        intakeMotor1 = new TalonFX(IntakeConstants.DRIVE, Settings.upper);
+        intakeMotor1.setNeutralMode(NeutralModeValue.Coast);
     }
 
     public void deploy() {
@@ -40,15 +42,13 @@ public class Intake extends SubsystemBase {
 
     public void intake() {
         intakeMotor1.setControl(
-            velocityVoltage
-            .withVelocity(Settings.Intake.INTAKE_RPM)
+           power.withOutput(1)
         );
     }
 
     public void outtake() {
         intakeMotor1.setControl(
-            velocityVoltage
-            .withVelocity(Settings.Intake.OUTTAKE_RPM)
+           power.withOutput(-1)
         );
     }
 

@@ -1,5 +1,6 @@
 package com.INT.robot.constants;
 
+import com.INT.robot.constants.Settings.Hood;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
@@ -579,11 +580,12 @@ public interface Motors {
                 .withPIDConstants(Gains.Hood.kP, Gains.Hood.kI, Gains.Hood.kD, 0)
                 .withFFConstants(Gains.Hood.kS, Gains.Hood.kV, Gains.Hood.kA, 0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign, 0)
-                .withSensorToMechanismRatio(Settings.Hood.GEAR_RATIO)
+               // .withSensorToMechanismRatio(Settings.Hood.GEAR_RATIO)
                 .withSoftLimits(
                         true, true,
                         Settings.Hood.FORWARD_SOFT_LIMIT,
-                        Settings.Hood.REVERSE_SOFT_LIMIT);
+                        Settings.Hood.REVERSE_SOFT_LIMIT)
+                .withRemoteSensor(HOOD_ENCODER, FeedbackSensorSourceValue.RemoteCANcoder, Hood.GEAR_RATIO);
 
         public static CANCoderConfig hoodEncoderConfigs = new CANCoderConfig()
                 .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)

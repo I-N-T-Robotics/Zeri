@@ -13,6 +13,9 @@ import edu.wpi.first.math.util.Units;
 public interface Settings {
     public final CANBus CANIVORE = new CANBus("canivore", ".logs/example.hoot");
 
+    public static final String upper = "Upper";
+    public static final String essentials = "Essentials";
+
     public interface Swerve {
         public final double MODULE_VELOCITY_DEADBAND_M_PER_S = 0.1;
         public final double ROTATIONAL_DEADBAND_RAD_PER_S = 0.1;
@@ -34,16 +37,16 @@ public interface Settings {
 
     public interface Turret {
         public interface Constants {
-            public final Transform2d TURRET_OFFSET = new Transform2d(5.65, 4.45, new Rotation2d(Math.toRadians(90))); //inches
+           public final Transform2d TURRET_OFFSET = new Transform2d(5.65, 4.45, new Rotation2d(Math.toRadians(90))); //inches
             public final double toleranceRadians = Units.degreesToRadians(5);
-            public final double TURRET_MIN_ROTATIONS = -135/360;
-            public final double TURRET_MAX_ROTATIONS = 135/360;
+            public final double TURRET_MIN_ROTATIONS = -0.375;
+            public final double TURRET_MAX_ROTATIONS = 0.375;
             public final double GEAR_RATIO_MOTOR_TO_MECH = 136;
         }
 
         public interface SoftwareLimit {
-            public final double FORWARD_MAX_ROTATIONS = 0.35;
-            public final double BACKWARDS_MAX_ROTATIONS = 0.35;
+            public final double FORWARD_MAX_ROTATIONS = 0.375;
+            public final double BACKWARDS_MAX_ROTATIONS = 0.375;
         }
 
         public interface Encoder {
@@ -86,6 +89,8 @@ public interface Settings {
         public final double HOOD_STALL_CURRENT = 20;
         public final double GEAR_RATIO = 0.67;
         //15 - 30 - 16 - 66 - 10T
+        //TODO: sensor to mech; not motor to mech
+
         //in rotations
         public final double FORWARD_SOFT_LIMIT = 0.5;
         public final double REVERSE_SOFT_LIMIT = 0.0;
@@ -94,6 +99,5 @@ public interface Settings {
 
     public interface Transition {
         public final double GEAR_RATIO = 2;
-        //15 - 30 - 30
     }
 }
