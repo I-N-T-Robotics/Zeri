@@ -33,6 +33,7 @@ public class Turret extends SubsystemBase {
 
     private boolean aimingAtGoal = true;
     private boolean isSeeded = false;
+    private boolean isFerrying = false;
 
     private CommandSwerveDrivetrain drivetrain;
 
@@ -47,13 +48,13 @@ public class Turret extends SubsystemBase {
     // }
 
     public Turret() {
-        turretMotor = new TalonFX(TurretConstants.TURRET_MOTOR, "Yuumi");
+        turretMotor = new TalonFX(TurretConstants.TURRET_MOTOR, Settings.upper);
         turretMotor.getConfigurator();
         turretMotor.setNeutralMode(NeutralModeValue.Brake);
 
-        turretMotorEncoderTurret = new CANcoder(TurretConstants.TURRET_ENCODER_TURRET, "Yuumi");
+        turretMotorEncoderTurret = new CANcoder(TurretConstants.TURRET_ENCODER_TURRET, Settings.upper);
 
-        turretMotorEncoderEncoder = new CANcoder(TurretConstants.TURRET_ENCODER_ENCODER, "Yuumi");
+        turretMotorEncoderEncoder = new CANcoder(TurretConstants.TURRET_ENCODER_ENCODER, Settings.upper);
 
         targetPosition = new MotionMagicVoltage(0);
         setCurrentPosition();
@@ -111,8 +112,10 @@ public class Turret extends SubsystemBase {
 
     public Translation2d getGoalPosition() {
         if (aimingAtGoal && robotIsOnAllianceSide() && Robot.isHubActive()) {
+            isFerrying = false;
             return Field.hubCenter;
         } else {
+            isFerrying = true;
             return isInTopSide() ? Field.topFerry : Field.bottomFerry;
         }
     }
@@ -126,6 +129,14 @@ public class Turret extends SubsystemBase {
 
         double dx = goalPosition.getX() - robotPose.getX();
         double dy = goalPosition.getY() - robotPose.getY();
+
+        if (isFerrying) {
+            double vx = drivetrain.getChassisSpeeds().vxMetersPerSecond;
+            double shootWhileMovingFactor = 0.2;
+
+            dx += vx * shootWhileMovingFactor;
+        }
+        //ferry while moving 
 
         // Field-relative angle
         double fieldAngle = Math.atan2(dy, dx);

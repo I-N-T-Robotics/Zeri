@@ -16,6 +16,8 @@ public class Intake extends SubsystemBase {
     private TalonFX intakePivot;
     private TalonFX intakeMotor1;
 
+    private boolean isIntaking;
+
     private final PositionVoltage positionVoltage = new PositionVoltage(0).withEnableFOC(true);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true);
     private final DutyCycleOut power = new DutyCycleOut(0).withEnableFOC(true);
@@ -26,6 +28,8 @@ public class Intake extends SubsystemBase {
 
         intakeMotor1 = new TalonFX(IntakeConstants.DRIVE, Settings.upper);
         intakeMotor1.setNeutralMode(NeutralModeValue.Coast);
+
+        isIntaking = false;
     }
 
     public void deploy() {
@@ -38,6 +42,14 @@ public class Intake extends SubsystemBase {
         intakePivot.setControl(
             positionVoltage
             .withPosition(Settings.Intake.UP_POSITION));
+    }
+
+    public void toggleIntake() {
+        isIntaking = !isIntaking;
+
+        intakeMotor1.setControl(
+            power.withOutput(isIntaking ? 1 : 0)
+        );
     }
 
     public void intake() {

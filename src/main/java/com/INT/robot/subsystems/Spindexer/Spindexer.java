@@ -31,13 +31,13 @@ public class Spindexer extends SubsystemBase {
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true);
 
     public Spindexer() {
-        intakeSpindexMotor = new TalonFX(Motors.SpindexerConstants.INTAKE_SPINDEXER_MOTOR, "yuumi");
+        intakeSpindexMotor = new TalonFX(Motors.SpindexerConstants.INTAKE_SPINDEXER_MOTOR, Settings.upper);
         intakeSpindexMotor.setNeutralMode(NeutralModeValue.Coast);
 
-        farSpindexMotor = new TalonFX(Motors.SpindexerConstants.FAR_SPINDEXER_MOTOR, "yuumi");
+        farSpindexMotor = new TalonFX(Motors.SpindexerConstants.FAR_SPINDEXER_MOTOR, Settings.upper);
         farSpindexMotor.setNeutralMode(NeutralModeValue.Coast);
 
-        transitionMotor = new TalonFX(Motors.SpindexerConstants.TRANSITION_MOTOR, "yuumi");
+        transitionMotor = new TalonFX(Motors.SpindexerConstants.TRANSITION_MOTOR, Settings.upper);
         transitionMotor.setNeutralMode(NeutralModeValue.Coast);
 
         intakeSpindexMotor.setControl(new Follower(Motors.SpindexerConstants.FAR_SPINDEXER_MOTOR,  MotorAlignmentValue.Aligned));
@@ -73,6 +73,12 @@ public class Spindexer extends SubsystemBase {
         farSpindexMotor.setControl(
             velocityVoltage
             .withVelocity(0));
+    }
+
+    public void reverseSpindexer() {
+        farSpindexMotor.setControl(
+            velocityVoltage
+            .withVelocity(-Settings.Spindexer.SPINDEXER_RPM));
     }
 
     public double getSpindexerRPM() {

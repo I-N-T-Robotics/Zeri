@@ -32,10 +32,10 @@ public class Shooter extends SubsystemBase {
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withEnableFOC(true);
 
     public Shooter() {
-        rightMotor = new TalonFX(ShooterConstants.RIGHT_MOTOR, "yuumi");
+        rightMotor = new TalonFX(ShooterConstants.RIGHT_MOTOR, Settings.upper);
         rightMotor.setNeutralMode(NeutralModeValue.Coast);
 
-        leftMotor = new TalonFX(ShooterConstants.LEFT_MOTOR, "yuumi");
+        leftMotor = new TalonFX(ShooterConstants.LEFT_MOTOR, Settings.upper);
         leftMotor.setNeutralMode(NeutralModeValue.Coast);
 
         leftMotor.setControl(new Follower(Motors.ShooterConstants.RIGHT_MOTOR, MotorAlignmentValue.Aligned)); //set to Opposite for other direction
